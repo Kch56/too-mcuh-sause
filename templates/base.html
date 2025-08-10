@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}Too Much Sawce Catering{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    /* RESET */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:#fff}
+
+    /* SITE BACKGROUND (purple gradient) */
+    body{
+      background:linear-gradient(135deg,#2d0a4e 0%,#4b0082 45%,#2b0a3d 100%);
+      background-size:300% 300%;
+      background-attachment:fixed;
+      animation:bgshift 22s ease-in-out infinite;
+    }
+    @keyframes bgshift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    /* NAVBAR */
+    .navbar{
+      position:sticky;top:0;z-index:999;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 20px;
+      background:#0f0a1a; /* solid */
+      border-bottom:1px solid rgba(255,215,0,.15);
+    }
+    .brand{
+      color:#ffd700;text-decoration:none;font-weight:800;letter-spacing:.3px;
+      white-space:nowrap;
+    }
+    .nav-toggle{
+      display:none;background:none;border:none;color:#ffd700;font-size:1.9rem;cursor:pointer;
+    }
+    .nav-links{
+      display:flex;gap:18px;align-items:center;
+    }
+    .nav-links a{
+      color:#fff;text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600;
+      transition:color .2s ease, background-color .2s ease;
+    }
+    .nav-links a:hover{color:#ffd700;background:rgba(255,215,0,.12)}
+
+    /* MAIN/FOOTER */
+    main{padding:40px 20px}
+    footer{padding:30px 20px;text-align:center;color:#cfc3ff;border-top:1px solid rgba(255,215,0,.12)}
+
+    /* MOBILE NAV */
+    @media (max-width: 900px){
+      .nav-toggle{display:block}
+      .nav-links{
+        position:absolute;left:0;right:0;top:100%;
+        display:none;flex-direction:column;gap:0;
+        background:#0f0a1a;border-bottom:1px solid rgba(255,215,0,.15);
+      }
+      .nav-links a{padding:12px 18px;border-radius:0}
+      .nav-links.active{display:flex}
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="Main">
+    <a class="brand" href="{{ url_for('home') }}" style="display:flex;align-items:center;gap:10px;">
+      <img src="{{ url_for('static', filename='images/logo/logoo.png') }}" alt="Logo" style="height:38px;width:auto;vertical-align:middle;">
+      Too Much Sawce
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('about') }}">About</a>
+      <a href="{{ url_for('what_we_offer') }}">What We Offer</a>
+      <a href="{{ url_for('gallery') }}">Gallery</a>
+      <a href="{{ url_for('contact') }}">Book Us</a>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>© 2025 Too Much Sawce Catering. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle (kept super simple + robust)
+    (function(){
+      const btn = document.querySelector('.nav-toggle');
+      const links = document.querySelector('.nav-links');
+      if (!btn || !links) return;
+      btn.addEventListener('click', () => {
+        const open = links.classList.toggle('active');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</body>
+</html>

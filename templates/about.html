@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+{% block title %}About – Too Much Sawce Catering{% endblock %}
+
+{% block content %}
+<style>
+  :root{
+    --bg:#0e0a16; --panel:#171026; --ink:#efe8ff; --gold:#ffd700;
+    --line:rgba(255,215,0,.18); --veil:rgba(255,255,255,.04);
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;margin:10px 0 18px;
+    background:
+      radial-gradient(1200px 400px at 10% -10%, rgba(255,215,0,.15), transparent 55%),
+      radial-gradient(980px 380px at 110% -15%, rgba(140,98,255,.12), transparent 60%),
+      linear-gradient(180deg,#140e22 0%, #0e0a16 70%);
+  }
+  .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;align-items:stretch}
+  .hero-copy{padding:26px;display:grid;gap:14px;align-content:center;justify-items:start}
+  .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem}
+  .title{color:#fff;font-weight:900;font-size:clamp(2rem,1.2rem+2.6vw,3rem);line-height:1.08;margin:0}
+  .sub{color:var(--ink);opacity:.95;margin:0;max-width:800px}
+  .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-block;background:var(--gold);color:#1a132b;font-weight:900;padding:12px 18px;border-radius:12px;text-decoration:none;box-shadow:0 10px 24px rgba(255,215,0,.28);transition:.2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(255,215,0,.4)}
+  .btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--gold);box-shadow:none}
+
+  .hero-media{position:relative;min-height:360px}
+  .hero-media video{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.9)}
+  .hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%, rgba(14,10,22,.65) 100%)}
+
+  @media (max-width:960px){
+    .hero-inner{grid-template-columns:1fr}
+    .hero-media{order:-1; min-height:260px}
+    .hero-copy{justify-items:start}
+  }
+
+  /* ===== PILLARS ===== */
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0 6px}
+  .pill{background:var(--veil);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:6px;text-align:center}
+  .pill strong{color:var(--gold);font-size:clamp(1.1rem,1rem+1vw,1.6rem)}
+  .pill span{color:var(--ink);opacity:.95}
+  @media (max-width:900px){ .pillars{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .pillars{grid-template-columns:1fr} }
+
+  /* ===== SECTION ===== */
+  .section{margin-top:26px}
+  .section h2{text-align:center;color:var(--gold);margin-bottom:8px}
+  .section p.lead{text-align:center;color:var(--ink);opacity:.9;max-width:760px;margin:0 auto 12px}
+
+  /* ===== STORY ===== */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+  .card{background:var(--veil);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .story .text{display:grid;gap:10px}
+  .quote{color:#fff;font-weight:700;font-size:1.1rem;margin:0}
+  .meta{color:var(--ink);opacity:.9}
+  .portrait{border-radius:16px;overflow:hidden}
+  .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+  @media (max-width:900px){ .story{grid-template-columns:1fr} }
+
+  /* ===== BIO CHIPS ===== */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .chip{border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
+  .chip strong{color:var(--gold);font-weight:800}
+
+  /* ===== VALUES ===== */
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .value{background:var(--veil);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px}
+  .value h3{color:var(--gold);margin:0}
+  .value p{color:var(--ink);opacity:.95;margin:0}
+  @media (max-width:900px){ .values{grid-template-columns:1fr} }
+
+  /* ===== TIMELINE ===== */
+  .timeline{margin-top:12px}
+  .tl{display:grid;gap:12px}
+  .tl-item{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
+  .tl-time{color:#1a132b;background:var(--gold);font-weight:900;border-radius:10px;padding:6px 10px;display:inline-block;text-align:center}
+  .tl-card{background:var(--veil);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .tl-card h4{color:var(--gold);margin:0 0 4px}
+  .tl-card p{color:var(--ink);opacity:.95;margin:0}
+  @media (max-width:700px){ .tl-item{grid-template-columns:1fr} .tl-time{justify-self:start} }
+
+  /* ===== TESTIMONIALS (centered slider) ===== */
+  .testi-wrap{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--veil);margin-top:12px}
+  .testi-track{display:flex;transition:transform .45s ease}
+  .testi{min-width:100%;padding:24px;display:grid;gap:10px;max-width:860px;margin:0 auto;text-align:center}
+  .say{color:#fff;font-size:1.07rem;line-height:1.5}
+  .who{color:var(--ink);opacity:.9}
+  .t-btn{position:absolute;top:50%;transform:translateY(-50%);background:var(--gold);color:#1a132b;border:0;border-radius:10px;cursor:pointer;font-weight:800;line-height:1;padding:10px 12px}
+  .t-prev{left:10px} .t-next{right:10px}
+
+  /* ===== SERVICE AREA ===== */
+  .service{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:12px}
+  .map{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--veil);min-height:280px;display:grid;place-items:center}
+  .map img{width:100%;height:100%;object-fit:cover;display:block}
+  @media (max-width:900px){ .service{grid-template-columns:1fr} }
+
+  /* ===== CTA ===== */
+  .cta{margin:28px auto 20px;max-width:1000px;padding:20px;text-align:center;background:linear-gradient(90deg,rgba(255,215,0,.15),rgba(255,215,0,.05));border:1px solid var(--line);border-radius:16px}
+
+  /* === Desktop polish (≥1200px) === */
+  @media (min-width: 1200px){
+    .wrap{ max-width: 1280px; }
+    .hero-inner{ grid-template-columns: 1fr 1fr; }
+    .hero-media{ min-height: clamp(420px, 42vh, 560px); }
+    .hero-media video{ object-position: center; }
+    .title{ font-size: clamp(2.2rem, 1.3rem + 2.2vw, 3.2rem); }
+    .sub{ max-width: 720px; }
+
+    .pillars{ gap: 14px; }
+    .pill{ padding: 18px; }
+
+    .story{ gap: 18px; }
+    .card{ padding: 20px; }
+    .portrait{ max-height: 560px; }
+    .portrait img{ object-position: center top; }
+
+    .values{ gap: 16px; }
+    .value{ padding: 20px; }
+
+    .testi{ max-width: 900px; padding: 28px; }
+    .t-btn{ transform: translateY(-50%); }
+
+    .service{ grid-template-columns: 1.1fr .9fr; gap: 18px; }
+    .map{ min-height: 340px; }
+  }
+
+  /* === Very wide screens (≥1400px) === */
+  @media (min-width: 1400px){
+    .wrap{ max_width: 1360px; }
+    .hero-inner{ grid-template-columns: 1.1fr .9fr; }
+    .title{ font-size: clamp(2.4rem, 1.2rem + 2.6vw, 3.6rem); }
+    .sub{ max-width: 780px; }
+    .pill strong{ font-size: 1.6rem; }
+  }
+
+  /* === Small desktop (992–1199px) === */
+  @media (min-width: 992px) and (max-width: 1199.98px){
+    .wrap{ max-width: 1040px; }
+    .hero-inner{ grid-template-columns: 1.05fr .95fr; }
+    .title{ font-size: clamp(2rem, 1rem + 2vw, 2.6rem); }
+    .sub{ max-width: 640px; }
+  }
+</style>
+
+<div class="wrap">
+  <!-- HERO (video) -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="eyebrow">Our Kitchen, Your Moment</div>
+        <h1 class="title">Too Much Sawce is a chef-driven catering studio crafting menus around people, not templates.</h1>
+        <p class="sub">From intimate dinners to 200-guest celebrations, we design food that tells your story—seasonal, soulful, and plated with love.</p>
+        <div class="hero-actions">
+          <a class="btn" href="{{ url_for('contact') }}">Request A Quote</a>
+          <a class="btn btn-ghost" href="{{ url_for('gallery') }}">View Gallery</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <video autoplay muted loop playsinline>
+          <source src="{{ url_for('static', filename='video/homepagevid1.mp4') }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section class="pillars" aria-label="Quick facts">
+    <div class="pill"><strong data-count="120">0</strong><span>Events catered</span></div>
+    <div class="pill"><strong data-count="4.9">0</strong><span>Average client rating</span></div>
+    <div class="pill"><strong data-count="6">0</strong><span>Years serving CLT</span></div>
+    <div class="pill"><strong data-count="100">0</strong><span>Custom menus created</span></div>
+  </section>
+
+  <!-- STORY -->
+  <section class="section" aria-label="Our story">
+    <h2>Meet Chef Joseph Graham</h2>
+    <p class="lead">Owner of <strong>@toomuchsawcecateringLLC</strong>. God-fearing, football fanatic, music lover — bringing hospitality and heart to every plate.</p>
+    <div class="story">
+      <div class="card text">
+        <p class="quote">“Food is a love language. We listen first, then we cook.”</p>
+        <p class="meta">Chef <strong>Joseph Graham</strong> built Too Much Sawce on family recipes, relentless curiosity, and the belief that great service matters as much as great flavor. His journey runs <strong>Tuskegee → Huntsville → Denver → Indianapolis → Charlotte</strong>, and those miles show up in the menu — Southern comfort, Latin and coastal influences, and elegant plating that still feels like home.</p>
+        <div class="chips">
+          <span class="chip"><strong>ΩΨΦ</strong> (NE)</span>
+          <span class="chip"><strong>#AAMU</strong> alumni</span>
+          <span class="chip">Football fanatic</span>
+          <span class="chip">Music lover</span>
+          <span class="chip">CLT-based</span>
+        </div>
+        <p class="meta">Today, Too Much Sawce caters private dinners, weddings, corporate events, and weekly meal prep across the Charlotte area — crafting menus around people, not templates.</p>
+      </div>
+      <div class="portrait">
+        <img src="{{ url_for('static', filename='images/sheff.png') }}" alt="Chef Joseph Graham portrait">
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section" aria-label="What we value">
+    <h2>What Drives Us</h2>
+    <div class="values">
+      <article class="value">
+        <h3>Hospitality First</h3>
+        <p>We treat your guests like our own—warm service, on time, no stress.</p>
+      </article>
+      <article class="value">
+        <h3>Seasonal & Local</h3>
+        <p>We source fresh and close to home whenever possible for peak flavor.</p>
+      </article>
+      <article class="value">
+        <h3>Inclusive Menus</h3>
+        <p>Vegetarian, vegan, halal-friendly, gluten-free—we build menus everyone can enjoy.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section" aria-label="Milestones">
+    <h2>Milestones</h2>
+    <div class="timeline">
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-time">2019</div>
+          <div class="tl-card">
+            <h4>First Private Dinner</h4>
+            <p>Hosted a six-course tasting for friends. Word spread fast.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2021</div>
+          <div class="tl-card">
+            <h4>100th Event</h4>
+            <p>From birthdays to corporate luncheons, we refined our service systems.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2023</div>
+          <div class="tl-card">
+            <h4>Wedding Program</h4>
+            <p>Launched tastings, staffing, plated or buffet service, and rentals coordination.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2025</div>
+          <div class="tl-card">
+            <h4>Charlotte & Beyond</h4>
+            <p>Weekly meal prep plus corporate catering across the CLT metro.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" aria-label="What clients say">
+    <h2>What Clients Say</h2>
+    <div class="testi-wrap" id="testi">
+      <button class="t-btn t-prev" aria-label="Previous">‹</button>
+      <div class="testi-track" id="testiTrack">
+        <figure class="testi">
+          <blockquote class="say">“Every course was stunning and the staff was a dream to work with. Our guests still talk about the short rib.”</blockquote>
+          <figcaption class="who">— Jordan R., Private Dinner</figcaption>
+        </figure>
+        <figure class="testi">
+          <blockquote class="say">“They nailed our vibe. Beautiful stations, smooth service, and incredible flavor. Book them.”</blockquote>
+          <figcaption class="who">— Mia & Andre, Wedding</figcaption>
+        </figure>
+        <figure class="testi">
+          <blockquote class="say">“Reliable and delicious. Perfect for our quarterly leadership meetings.”</blockquote>
+          <figcaption class="who">— K. Patel, Corporate Client</figcaption>
+        </figure>
+      </div>
+      <button class="t-btn t-next" aria-label="Next">›</button>
+    </div>
+  </section>
+
+  <!-- SERVICE AREA -->
+  <section class="section" aria-label="Service area">
+    <h2>Where We Serve</h2>
+    <div class="service">
+      <div class="map">
+        <img src="{{ url_for('static', filename='images/map.png') }}" alt="Charlotte metro service area">
+      </div>
+      <div class="card">
+        <p class="lead" style="text-align:left;margin-bottom:8px">Charlotte-based, traveling across the metro. For farther events, travel fees may apply.</p>
+        <p class="meta">Popular zones: Uptown, South End, Plaza Midwood, NoDa, Ballantyne, University, Matthews, Huntersville, Concord, Gastonia.</p>
+        <div style="margin-top:12px">
+          <a class="btn" href="{{ url_for('contact') }}">Check Your Date</a>
+          <a class="btn btn-ghost" href="{{ url_for('gallery') }}" style="margin-left:8px">See Our Work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <p style="color:var(--ink);margin:0 0 10px">Ready to plan something unforgettable?</p>
+    <a class="btn" href="{{ url_for('contact') }}">Request A Quote</a>
+  </section>
+</div>
+
+<script>
+  // Counters
+  (function(){
+    const els = document.querySelectorAll('[data-count]');
+    const obs = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const el = e.target, target = parseFloat(el.dataset.count);
+        const isFloat = String(el.dataset.count).includes('.');
+        const start = performance.now(), dur = 900;
+        function tick(t){
+          const p = Math.min(1,(t-start)/dur);
+          const v = target * (0.1 + 0.9*p*p);
+          el.textContent = isFloat ? v.toFixed(1) : Math.round(v);
+          if(p<1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        obs.unobserve(el);
+      });
+    }, {threshold:.2});
+    els.forEach(el=>obs.observe(el));
+  })();
+
+  // Testimonials slider (centered)
+  (function(){
+    const track = document.getElementById('testiTrack');
+    const prev = document.querySelector('.t-prev');
+    const next = document.querySelector('.t-next');
+    if(!track || !prev || !next) return;
+    const slides = Array.from(track.children);
+    let idx = 0, id = null, last = 0;
+
+    function render(){ track.style.transform = `translateX(${idx * -100}%)`; }
+    function go(i, user=false){ idx=(i+slides.length)%slides.length; render(); if(user) pause(); }
+    function auto(){ if(id) return; id=setInterval(()=>go(idx+1), 5200); }
+    function pause(){ if(id){ clearInterval(id); id=null; } last=Date.now(); setTimeout(()=>{ if(Date.now()-last>6000) auto(); }, 6200); }
+
+    prev.addEventListener('click',()=>go(idx-1,true));
+    next.addEventListener('click',()=>go(idx+1,true));
+    document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(idx-1,true); if(e.key==='ArrowRight') go(idx+1,true); });
+
+    render(); auto();
+  })();
+</script>
+{% endblock %}

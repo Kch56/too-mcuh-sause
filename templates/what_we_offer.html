@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% block title %}What We Offer – Too Much Sawce Catering{% endblock %}
+
+{% block content %}
+<style>
+  :root{
+    --bg:#0e0a16;
+    --panel:#171026;
+    --ink:#efe8ff;
+    --gold:#ffd700;
+    --gold-2:rgba(255,215,0,.16);
+    --line:rgba(255,215,0,.18);
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+
+  /* ===== HERO / CAROUSEL ===== */
+  .hero{position:relative;border-radius:22px;overflow:hidden;margin:10px 0 16px;
+    background:radial-gradient(1200px 400px at 10% -10%, rgba(255,215,0,.15), transparent 55%),
+               radial-gradient(1000px 400px at 110% -20%, rgba(140,98,255,.15), transparent 55%),
+               linear-gradient(180deg, #140e22, #0e0a16 70%);
+    border:1px solid var(--line);
+  }
+  .hero-inner{position:relative}
+  .hero-track{display:flex;transition:transform .5s ease;will-change:transform}
+  .hero-slide{min-width:100%;aspect-ratio:16/9;position:relative}
+  .hero-slide img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85)}
+  .hero-overlay{
+    position:absolute;inset:0;display:grid;align-items:end;pointer-events:none;
+    background:linear-gradient(180deg, rgba(14,10,22,0) 35%, rgba(14,10,22,.65) 72%, rgba(14,10,22,.88) 100%);
+  }
+  .hero-copy{pointer-events:auto;padding:20px;display:grid;gap:10px}
+  .eyebrow{color:var(--gold);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem}
+  .title{color:#fff;font-weight:900;font-size:clamp(1.8rem,1.2rem+2.4vw,2.8rem);line-height:1.05;margin:0}
+  .sub{color:var(--ink);opacity:.9;max-width:800px;margin:0}
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .hero-cta-wrap { display: flex; flex-direction: column; align-items: stretch; }
+  @media (max-width: 600px) {
+    .hero-cta-wrap { align-items: stretch; }
+    .hero-cta { justify-content: center; }
+  .dots { position: static; margin: 32px 0 0 0; width: 100%; justify-content: center; }
+  }
+  .btn{display:inline-block;background:var(--gold);color:#1a132b;font-weight:900;padding:12px 18px;border-radius:12px;text-decoration:none;box-shadow:0 10px 24px rgba(255,215,0,.28);transition:.2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(255,215,0,.4)}
+  .btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--gold);box-shadow:none}
+
+  .hero-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+  .hbtn{background:var(--gold);border:0;color:#1a132b;border-radius:12px;font-weight:900;padding:10px 12px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+  .dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,215,0,.35);border:1px solid rgba(255,215,0,.65);transition:transform .2s, background .2s}
+  .dot.active{background:var(--gold);transform:scale(1.15)}
+
+  /* ===== QUICK VALUE ===== */
+  .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 8px}
+  .q{background:rgba(255,255,255,.04);border:1px solid var(--gold-2);border-radius:16px;padding:16px;display:grid;gap:6px;text-align:center}
+  .q strong{color:var(--gold);font-size:clamp(1.2rem,1rem+1.2vw,1.8rem)}
+  .q span{color:var(--ink);opacity:.9}
+  @media (max-width:900px){ .quick{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .quick{grid-template-columns:1fr} }
+
+  /* ===== SERVICES ===== */
+  .section{margin-top:26px}
+  .section h2{text-align:center;color:var(--gold);margin-bottom:8px}
+  .section p.lead{text-align:center;color:var(--ink);opacity:.9;max-width:760px;margin:0 auto 12px}
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .card{background:rgba(255,255,255,.04);border:1px solid var(--gold-2);border-radius:16px;padding:18px;display:grid;gap:8px}
+  .icon{font-size:28px}
+  .card h3{color:var(--gold);margin:0}
+  .card p{color:var(--ink);opacity:.95;margin:0}
+  .badges{display:flex;flex-wrap:wrap;gap:6px}
+  .badge{font-size:.85rem;color:#1a132b;background:var(--gold);padding:6px 10px;border-radius:999px;font-weight:800}
+  @media (max-width:900px){ .services{grid-template-columns:1fr} }
+
+  /* ===== MENU STYLES ===== */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .chip{border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
+  .chip:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* ===== GALLERY PREVIEW ===== */
+  .carousel{position:relative;margin:16px auto 6px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+  .carousel-track{display:flex;transition:transform .45s ease;will-change:transform}
+  .slide{min-width:100%;aspect-ratio:16/9;position:relative}
+  .slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .c-btn{position:absolute;top:50%;transform:translateY(-50%);background:var(--gold);color:#1a132b;border:0;border-radius:10px;cursor:pointer;font-weight:800;line-height:1;padding:10px 12px;font-size:18px;z-index:2;box-shadow:0 8px 18px rgba(0,0,0,.25)}
+  .c-prev{left:12px}.c-next{right:12px}
+  .caro-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 4px 0}
+  .hint{color:var(--ink);opacity:.9}
+
+  /* ===== FAQ ===== */
+  .faq{display:grid;gap:10px;margin-top:12px}
+  .qa{border:1px solid var(--gold-2);border-radius:14px;background:rgba(255,255,255,.04);overflow:hidden}
+  .qhead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer}
+  .qhead h4{color:var(--gold);margin:0}
+  .qbody{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .qbody p{padding:0 16px 14px;color:var(--ink);opacity:.95}
+  .qa.open .qbody{max-height:260px}
+
+  /* ===== CTA ===== */
+  .cta{margin:28px auto 20px;max-width:1000px;padding:20px;text-align:center;background:linear-gradient(90deg,rgba(255,215,0,.15),rgba(255,215,0,.05));border:1px solid var(--line);border-radius:16px}
+
+  /* ===== STICKY MOBILE BAR ===== */
+  .sticky{
+    position:sticky;bottom:10px;z-index:30;display:none;justify-content:center
+  }
+  .sticky a{background:var(--gold);color:#1a132b;font-weight:900;padding:12px 18px;border-radius:999px;box-shadow:0 14px 34px rgba(255,215,0,.35);text-decoration:none}
+  @media (max-width:760px){ .sticky{display:flex} }
+</style>
+
+<div class="wrap">
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-label="Hero">
+    {% if images and images|length > 0 %}
+    <div class="hero-inner" id="hero">
+      <div class="hero-track" id="heroTrack">
+        {% for img in images[:6] %}
+        <div class="hero-slide" data-i="{{ loop.index0 }}">
+          <img src="{{ url_for('static', filename=img) }}" alt="Signature dish {{ loop.index }}" loading="eager" />
+          <div class="hero-overlay"></div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="hero-nav">
+        <button class="hbtn" id="hPrev" aria-label="Previous hero">‹</button>
+        <button class="hbtn" id="hNext" aria-label="Next hero">›</button>
+      </div>
+      <div class="hero-cta-wrap">
+        <div class="hero-cta">
+          <a class="btn" href="{{ url_for('contact') }}">Request A Quote</a>
+          <a class="btn btn-ghost" href="{{ url_for('gallery') }}">View Full Gallery</a>
+        </div>
+        <div class="dots" id="hDots"></div>
+      </div>
+      <div class="hero-copy">
+        <div class="eyebrow">Chef-Driven. Guest-Obsessed.</div>
+        <h1 class="title">We design the menu around your moment.</h1>
+        <p class="sub">Private dinners, weddings, showers, corporate events, and weekly meal prep — all crafted to your taste, your budget, your vibe.</p>
+      </br>
+      </div>
+    </div>
+    {% else %}
+    <!-- Fallback hero when no images yet -->
+    <div class="hero-inner">
+      <div class="hero-slide" style="aspect-ratio:16/9"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <div class="eyebrow">Chef-Driven. Guest-Obsessed.</div>
+        <h1 class="title">We design the menu around your moment.</h1>
+        <p class="sub">Private dinners, weddings, showers, corporate events, and weekly meal prep — all crafted to your taste, your budget, your vibe.</p>
+        <div class="hero-cta">
+          <a class="btn" href="{{ url_for('contact') }}">Request A Quote</a>
+          <a class="btn btn-ghost" href="{{ url_for('gallery') }}">View Full Gallery</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ===== QUICK VALUE ===== -->
+  <section class="quick" aria-label="Key stats">
+    <div class="q"><strong data-count="500">0</strong><span>Plates served last season</span></div>
+    <div class="q"><strong data-count="4.9">0</strong><span>Average client rating</span></div>
+    <div class="q"><strong data-count="120">0</strong><span>Events catered</span></div>
+    <div class="q"><strong data-count="100">0</strong><span>Custom menus created</span></div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="section" aria-label="Signature Services">
+    <h2>Signature Services</h2>
+    <p class="lead">No strict menu here — just chef creativity shaped to your guests, venue, and budget.</p>
+    <div class="services">
+      <article class="card">
+        <div class="icon">🍷</div>
+        <h3>Private Dinners</h3>
+        <p>Multi-course meals cooked on-site for intimate nights in.</p>
+        <div class="badges">
+          <span class="badge">3–7 courses</span>
+          <span class="badge">Plated or family-style</span>
+          <span class="badge">Wine pairings</span>
+        </div>
+      </article>
+      <article class="card">
+        <div class="icon">🎉</div>
+        <h3>Events & Weddings</h3>
+        <p>From showers to corporate galas — buffet, plated, or stations.</p>
+        <div class="badges">
+          <span class="badge">Custom menu</span>
+          <span class="badge">Staff & setup</span>
+          <span class="badge">Dietary friendly</span>
+        </div>
+      </article>
+      <article class="card">
+        <div class="icon">🥗</div>
+        <h3>Weekly Meal Prep</h3>
+        <p>Chef-made meals tailored to your goals and schedule.</p>
+        <div class="badges">
+          <span class="badge">Macro-balanced</span>
+          <span class="badge">Pickup/Delivery</span>
+          <span class="badge">Family packs</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== MENU STYLES ===== -->
+  <section class="section" aria-label="Menu styles">
+    <h2>Menu Styles We Love</h2>
+    <p class="lead">Tell us your cravings — we’ll spin up the perfect plate list.</p>
+    <div class="chips">
+      <div class="chip">Southern Comfort</div>
+      <div class="chip">Mediterranean</div>
+      <div class="chip">Latin Fusion</div>
+      <div class="chip">Seafood-Forward</div>
+      <div class="chip">Vegetarian & Vegan</div>
+      <div class="chip">BBQ & Smoke</div>
+      <div class="chip">Brunch Boards</div>
+      <div class="chip">Dessert Tables</div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY PREVIEW CAROUSEL ===== -->
+  {% if images and images|length > 0 %}
+  <section class="section" aria-label="Gallery preview">
+    <h2>See The Vibe</h2>
+    <p class="lead">A quick scroll through recent plates. Hungry yet?</p>
+    <div class="carousel" id="carousel">
+      <button class="c-btn c-prev" aria-label="Previous">‹</button>
+      <div class="carousel-track" id="carouselTrack">
+        {% for img in images[:12] %}
+        <div class="slide" data-i="{{ loop.index0 }}">
+          <img src="{{ url_for('static', filename=img) }}" alt="Dish photo {{ loop.index }}" loading="lazy">
+        </div>
+        {% endfor %}
+      </div>
+      <button class="c-btn c-next" aria-label="Next">›</button>
+    </div>
+    <div class="caro-bar">
+      <span class="hint">Want more? Explore the full gallery of dishes and event spreads.</span>
+      <a class="btn" href="{{ url_for('gallery') }}">View Full Gallery</a>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ===== FAQ ===== -->
+  <section class="section" aria-label="FAQs">
+    <h2>Quick Answers</h2>
+    <div class="faq">
+      <article class="qa">
+        <div class="qhead"><h4>Do you offer tastings?</h4><span>＋</span></div>
+        <div class="qbody"><p>Yes — for private dinners and events. Tell us your menu concept and we’ll schedule a tasting if requested.</p></div>
+      </article>
+      <article class="qa">
+        <div class="qhead"><h4>Can you accommodate dietary needs?</h4><span>＋</span></div>
+        <div class="qbody"><p>Absolutely. We regularly craft gluten-free, dairy-free, vegetarian, vegan, and halal-friendly menus.</p></div>
+      </article>
+      <article class="qa">
+        <div class="qhead"><h4>What areas do you serve?</h4><span>＋</span></div>
+        <div class="qbody"><p>We’re Charlotte-based and travel across the metro area. For farther events, travel fees may apply.</p></div>
+      </article>
+      <article class="qa">
+        <div class="qhead"><h4>How far in advance should I book?</h4><span>＋</span></div>
+        <div class="qbody"><p>For weekends, 4–8 weeks is ideal. Reach out sooner for weddings or larger events.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta" aria-label="Call to action">
+    <p style="color:var(--ink);margin:0 0 10px">Ready to craft a custom menu for your event?</p>
+    <a class="btn" href="{{ url_for('contact') }}">Request A Quote</a>
+  </section>
+
+  <!-- Sticky mobile booking bar -->
+  <div class="sticky"><a href="{{ url_for('contact') }}">Book Your Date</a></div>
+</div>
+
+<script>
+  // ===== Animated counters =====
+  (function(){
+    const els = document.querySelectorAll('[data-count]');
+    const once = {rootMargin:"-10% 0px -10% 0px", threshold:.2};
+    function animate(el){
+      const target = parseFloat(el.dataset.count);
+      const isFloat = String(el.dataset.count).includes('.');
+      const dur = 900, start = performance.now();
+      function tick(t){
+        const p = Math.min(1, (t-start)/dur);
+        const val = target * (0.1 + 0.9*p*p); // ease-in curve
+        el.textContent = isFloat ? val.toFixed(1) : Math.round(val);
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }});
+    }, once);
+    els.forEach(el=>io.observe(el));
+  })();
+
+  // ===== Hero Carousel =====
+  (function(){
+    const track = document.getElementById('heroTrack');
+    if(!track) return;
+    const slides = Array.from(track.children);
+    const prev = document.getElementById('hPrev');
+    const next = document.getElementById('hNext');
+    const dotsWrap = document.getElementById('hDots');
+    let idx = 0, tId = null, touchStart = null, last = 0;
+
+    function buildDots(){
+      dotsWrap.innerHTML = '';
+      slides.forEach((_,i)=>{
+        const b=document.createElement('button');
+        b.className='dot'+(i===0?' active':'');
+        b.setAttribute('aria-label','Go to hero '+(i+1));
+        b.onclick=()=>go(i,true);
+        dotsWrap.appendChild(b);
+      });
+    }
+    function render(){
+      track.style.transform = `translateX(${idx*-100}%)`;
+      [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===idx));
+    }
+    function go(i, user=false){
+      idx = (i+slides.length)%slides.length;
+      render(); if(user) pause();
+    }
+    function auto(){ tId=setInterval(()=>go(idx+1), 5000); }
+    function pause(){ if(tId){ clearInterval(tId); tId=null; } last=Date.now(); setTimeout(()=>{ if(Date.now()-last>6000) auto(); }, 6200); }
+
+    prev?.addEventListener('click',()=>go(idx-1,true));
+    next?.addEventListener('click',()=>go(idx+1,true));
+    document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(idx-1,true); if(e.key==='ArrowRight') go(idx+1,true); });
+
+    // swipe
+    track.addEventListener('touchstart',e=>{ touchStart=e.touches[0].clientX; pause(); },{passive:true});
+    track.addEventListener('touchmove',e=>{
+      if(touchStart==null) return;
+      const dx=e.touches[0].clientX - touchStart;
+      if(Math.abs(dx)>60){ dx>0?go(idx-1,true):go(idx+1,true); touchStart=null; }
+    },{passive:true});
+    track.addEventListener('touchend',()=>{ touchStart=null; });
+
+    buildDots(); render(); auto();
+  })();
+
+  // ===== Gallery Preview Carousel =====
+  (function(){
+    const track = document.getElementById('carouselTrack');
+    const wrap = document.getElementById('carousel');
+    if(!track || !wrap) return;
+    const slides = Array.from(track.children);
+    const prev = wrap.querySelector('.c-prev');
+    const next = wrap.querySelector('.c-next');
+    let idx=0, tId=null, startX=null, last=0;
+
+    function render(){ track.style.transform=`translateX(${idx*-100}%)`; }
+    function go(i, user=false){ idx=(i+slides.length)%slides.length; render(); if(user) pause(); }
+    function auto(){ if(tId) return; tId=setInterval(()=>go(idx+1), 4200); }
+    function pause(){ if(tId){ clearInterval(tId); tId=null; } last=Date.now(); setTimeout(()=>{ if(Date.now()-last>6000) auto(); }, 6200); }
+
+    prev.addEventListener('click',()=>go(idx-1,true));
+    next.addEventListener('click',()=>go(idx+1,true));
+    track.addEventListener('touchstart',e=>{ startX=e.touches[0].clientX; pause(); },{passive:true});
+    track.addEventListener('touchmove',e=>{
+      if(startX==null) return;
+      const dx=e.touches[0].clientX-startX;
+      if(Math.abs(dx)>60){ dx>0?go(idx-1,true):go(idx+1,true); startX=null; }
+    },{passive:true});
+    document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(idx-1,true); if(e.key==='ArrowRight') go(idx+1,true); });
+
+    render(); auto();
+  })();
+
+  // ===== FAQ =====
+  (function(){
+    document.querySelectorAll('.qa').forEach(box=>{
+      const head = box.querySelector('.qhead');
+      head.addEventListener('click', ()=>{
+        const open = box.classList.toggle('open');
+        head.querySelector('span').textContent = open ? '–' : '＋';
+      });
+    });
+  })();
+</script>
+{% endblock %}
